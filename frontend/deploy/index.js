@@ -1,10 +1,16 @@
 import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 
-const Deploy = async (contractName, contractCode) => {
+export const Deploy = async (contractName, contractCode) => {
   const txId = await fcl
     .send([
-      fcl.transaction`${contractCode}`,
+      fcl.transaction`
+            transaction(name: String, code: String) {
+                prepare(acct: AuthAccount) {
+                    acct.contracts.add(name: name, code: code.decodeHex())
+                }
+            }
+        `,
       fcl.proposer(fcl.currentUser().authorization),
       fcl.payer(fcl.currentUser().authorization),
       fcl.authorization([fcl.currentUser().authorization]),
@@ -19,4 +25,24 @@ const Deploy = async (contractName, contractCode) => {
   console.log("txId", txId);
 };
 
-export default Deploy;
+export const updateContract = async (contractName, contractCode) => {
+  const txId = await fcl.mutate({
+    cadence: `
+    transaction(name: String, cadence: String) {
+      prepare(signer: AuthAccount) {
+        let code = cadence.utf8
+        signer.contracts.update__experimental(name: name, code: code)
+      }
+    }
+  `,
+    args: (arg, t) => {
+      arg(contractName, t.String), arg(contractCode, t.String);
+    },
+    payer: fcl.currentUser().authorization,
+    proposer: fcl.currentUser().authorization,
+    authorization: [fcl.currentUser().authorization],
+    limit: 1000,
+  });
+
+  console.log("tx id is", txId);
+};
