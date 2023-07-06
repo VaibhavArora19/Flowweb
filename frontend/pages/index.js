@@ -1,12 +1,15 @@
 import Image from "next/image";
-import { Inter } from "next/font/google";
-
+import { Modal } from "../components/AI/Modal";
 const inter = Inter({ subsets: ["latin"] });
+import { useState } from "react";
 
 export default function Home() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    ></main>
+    <div>
+      <button onClick={() => setIsOpen(true)}>open</button>
+      {isOpen && <Modal onClose={() => setIsOpen(false)} />}
+    </div>
   );
 }
