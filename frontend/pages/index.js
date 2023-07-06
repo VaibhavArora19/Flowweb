@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Inter } from "next/font/google";
 import { Modal } from "../components/AI/Modal";
 const inter = Inter({ subsets: ["latin"] });
 import { useState } from "react";
