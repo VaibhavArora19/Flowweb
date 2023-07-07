@@ -1,7 +1,8 @@
 import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 
-export const Deploy = async (contractName, contractCode) => {
+export const deployContract = async (contractName, contractCode) => {
+  console.log("currentUser", fcl.currentUser());
   const txId = await fcl
     .send([
       fcl.transaction`
@@ -12,8 +13,8 @@ export const Deploy = async (contractName, contractCode) => {
             }
         `,
       fcl.proposer(fcl.currentUser().authorization),
-      fcl.payer(fcl.currentUser().authorization),
-      fcl.authorization([fcl.currentUser().authorization]),
+      fcl.payer(fcl.currentUser().authorization), // optional - default is fcl.authz
+      fcl.authorizations([fcl.currentUser().authorization]),
       fcl.limit(1000),
       fcl.args([
         fcl.arg(contractName, t.String),
