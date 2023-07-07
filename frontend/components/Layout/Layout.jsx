@@ -1,11 +1,12 @@
 import Navbar from "./Navbar";
 
-const Layout = ({children}) => {
-    return (
+const Layout = ({ children }) => {
+  return (
     <>
-        <Navbar />
-        {children}
+      <Navbar />
+      {children}
     </>
-    )};
+  );
+};
 
 export default Layout;

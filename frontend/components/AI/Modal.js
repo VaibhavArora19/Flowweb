@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Configuration, OpenAIApi } from "openai";
-
+import { useContext } from "react";
+import { AppContext } from "@/context/StateContext";
 const Backdrop = ({ onClose }) => {
   return (
     <div
@@ -11,9 +12,12 @@ const Backdrop = ({ onClose }) => {
 };
 
 export const Modal = ({ onClose }) => {
-  const [funInfo, setFunInfo] = useState("");
+  const ctx = useContext(AppContext);
+  const code = ctx.aiCode;
+  const setCode = ctx.setAiCode;
+
+  const [funInfo, setFunInfo] = useState();
   const [started, setStarted] = useState(false);
-  const [code, setCode] = useState("");
   const configuration = new Configuration({
     apiKey: process.env.NEXT_PUBLIC_OPENAI,
   });
@@ -40,7 +44,7 @@ export const Modal = ({ onClose }) => {
           },
           {
             role: "user",
-            content: "Write a function in Cadence to" + funInfo,
+            content: "Write a function in Cadence to " + funInfo,
           },
         ],
       });
@@ -87,19 +91,27 @@ export const Modal = ({ onClose }) => {
               <pre className="text-gray-300">{code}</pre>
             </div>
           )}
-          {started ? (
-            <button className="bg-blue-700 p-2 px-5 rounded-md mt-2 w-40 flex items-center justify-center">
-              <img src="/loading.gif" className="h-7 p-1"></img>
-            </button>
-          ) : (
-            <button
-              className="bg-blue-700 p-2 px-5 rounded-md mt-2"
-              onClick={getResponse}
-              disabled={!funInfo}
-            >
-              {code ? "Regenerate" : "Generate"}
-            </button>
-          )}
+          <div className="flex  gap-4">
+            {started ? (
+              <button className="bg-blue-700 p-2 px-5 rounded-md mt-2 w-40 flex items-center justify-center">
+                <img src="/loading.gif" className="h-7 p-1"></img>
+              </button>
+            ) : (
+              <button
+                className="bg-blue-700 p-2 px-5 rounded-md mt-2"
+                onClick={getResponse}
+                disabled={!funInfo}
+              >
+                {code ? "Regenerate" : "Generate"}
+              </button>
+            )}
+            {code && (
+              // @TODO : clicking on this will add the ai code to the main code in deployment section
+              <button className="bg-green-700 p-2 px-5 rounded-md mt-2">
+                use this code
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
