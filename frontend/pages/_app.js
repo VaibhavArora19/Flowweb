@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }) {
   return (
     <AppWrapper>
       <Layout />
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </AppWrapper>
   );
 }
