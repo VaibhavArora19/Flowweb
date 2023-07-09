@@ -28,7 +28,7 @@ export const deployContract = async (contractName, contractCode) => {
 };
 
 export const updateContract = async (contractName, contractCode) => {
-  const txId = await fcl.mutate({
+  const transactionId = await fcl.mutate({
     cadence: `
     transaction(name: String, cadence: String) {
       prepare(signer: AuthAccount) {
@@ -36,15 +36,16 @@ export const updateContract = async (contractName, contractCode) => {
         signer.contracts.update__experimental(name: name, code: code)
       }
     }
-  `,
-    args: (arg, t) => {
-      arg(contractName, t.String), arg(contractCode, t.String);
-    },
+    `,
+    args: (arg, t) => [
+      arg(contractName, t.String),
+      arg(contractCode, t.String),
+    ],
     payer: fcl.currentUser().authorization,
     proposer: fcl.currentUser().authorization,
-    authorization: [fcl.currentUser().authorization],
-    limit: 1000,
+    authorizations: [fcl.currentUser().authorization],
+    limit: 999,
   });
 
-  console.log("tx id is", txId);
+  console.log("tx id is", transactionId);
 };
