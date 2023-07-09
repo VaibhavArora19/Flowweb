@@ -2,15 +2,14 @@ import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 
 export const deployContract = async (contractName, contractCode) => {
-  console.log("currentUser", fcl.currentUser());
   const txId = await fcl
     .send([
       fcl.transaction`
-            transaction(name: String, code: String) {
-                prepare(acct: AuthAccount) {
-                    acct.contracts.add(name: name, code: code.decodeHex())
-                }
-            }
+              transaction(name: String, code: String) {
+                  prepare(acct: AuthAccount) {
+                      acct.contracts.add(name: name, code: code.decodeHex())
+                  }
+              }
         `,
       fcl.proposer(fcl.currentUser().authorization),
       fcl.payer(fcl.currentUser().authorization), // optional - default is fcl.authz
@@ -24,6 +23,8 @@ export const deployContract = async (contractName, contractCode) => {
     .then(fcl.decode);
 
   console.log("txId", txId);
+  const txStatus = await fcl.tx(txId).onceSealed();
+  console.log("tx Status ", txStatus);
 };
 
 export const updateContract = async (contractName, contractCode) => {

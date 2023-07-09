@@ -4,7 +4,7 @@ import styles from '../../node_modules/highlight.js/styles/railscasts.css'
 
 const Sidebar = ({contractArray}) => {
     const [contract, setContract] = useState("");
-    console.log("cc", contractArray)
+
     useEffect(() => {
         if(contractArray.length > 0) setContract(contractArray[0].contract);
     }, []);
