@@ -2,11 +2,12 @@ import { deployContract } from '@/deploy';
 import { useState } from 'react';
 import SuccessModal from '../Modals/DeployModal';
 import Loader from '../UI/Loader';
-
+import { ArgsModal } from './ArgsModal';
 const DeployForm = () => {
   const [contractName, setContractName] = useState('');
   const [contract, setContract] = useState('');
-  const [initializable, setInitializable] = useState(false);
+  const [haveArgs, setContractArgs] = useState(false);
+  const [argValues, setArgValues] = useState([]);
   const [loading, setLoading] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
 
@@ -14,17 +15,31 @@ const DeployForm = () => {
     setLoading(true);
     try {
       e.preventDefault();
-      await deployContract(contractName, contract);
+      if (contract.includes('init')) {
+        setContractArgs(true);
+        setLoading(false);
+      } else {
+        await deployContract(contractName, contract, []);
+        setLoading(false);
+        setSuccessModal(true);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setContractArgs(false);
+    }
+  };
+
+  const continueDeploy = async () => {
+    try {
+      await deployContract(contractName, contract, argValues);
       setLoading(false);
       setSuccessModal(true);
     } catch (error) {
       console.log(error);
       setLoading(false);
+      setContractArgs(false);
     }
-  };
-
-  const initializableHandler = () => {
-    setInitializable(!initializable);
   };
 
   return (
@@ -42,6 +57,7 @@ const DeployForm = () => {
             <input
               type="text"
               value={contractName}
+              placeholder="Enter contract name"
               onChange={e => {
                 setContractName(e.target.value);
               }}
@@ -64,38 +80,6 @@ const DeployForm = () => {
             />
           </div>
 
-          {/* <p className="text-sm mt-6 mb-2 text-gray-300">
-            Select the below button if you want to initialize your contract
-          </p>
-          <button
-            disabled={!contract.length ? true : false}
-            onClick={initializableHandler}
-            type="button"
-            className={`py-3 w-[150px] text-center rounded-md mb-1 ${
-              !contract.length && 'cursor-not-allowed'
-            } ${
-              initializable ? 'bg-[#1a3831] text-green-300' : 'bg-[#363636]'
-            } `}
-          >
-            Initialize
-          </button>
-          {initializable && (
-            <div className="flex flex-col ">
-              <p className="text-sm mt-6 mb-2 text-gray-300">Arguement types</p>
-              <input
-                id="argTypes"
-                className="bg-[#2D2D2D] py-2 px-2 border border-gray-700 rounded-md placeholder:text-gray-500 text-gray-300 my-1 outline-none"
-              ></input>
-              <p className="text-sm mt-3 mb-2 text-gray-300">
-                Arguement values
-              </p>
-              <input
-                id="argValues"
-                className="bg-[#2D2D2D] py-2 px-2 border border-gray-700 rounded-md placeholder:text-gray-500 text-gray-300 my-1 outline-none"
-              ></input>
-            </div>
-          )} */}
-
           <button
             disabled={!contract.length ? true : false}
             onClick={deployHandler}
@@ -107,6 +91,15 @@ const DeployForm = () => {
             {loading ? <Loader inComp={true} /> : 'Deploy'}
           </button>
         </form>
+        {haveArgs && (
+          <ArgsModal
+            onClose={() => setContractArgs(false)}
+            code={contract}
+            setArgValues={setArgValues}
+            argValues={argValues}
+            continueDeploy={continueDeploy}
+          />
+        )}
 
         {successModal && (
           <SuccessModal onClose={() => setSuccessModal(false)} />

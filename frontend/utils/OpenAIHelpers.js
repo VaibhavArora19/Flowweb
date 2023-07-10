@@ -1,30 +1,30 @@
-import { Configuration, OpenAIApi } from "openai";
+import { Configuration, OpenAIApi } from 'openai';
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPENAI,
 });
 const openai = new OpenAIApi(configuration);
-export const getABIFromCode = async (code) => {
+export const getABIFromCode = async code => {
   try {
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: 'gpt-3.5-turbo',
       messages: [
         {
-          role: "system",
-          content: "You are a helpful cadence assistant.",
+          role: 'system',
+          content: 'You are a helpful cadence assistant.',
         },
         {
-          role: "user",
+          role: 'user',
           content:
-            "convert this candence code to ABI: pub contract SimpleContract {\n    pub var greeting: String\n    init() {\n        self.greeting = `Hello, World!`\n    }\n    pub fun updateGreeting(newGreeting: String) {\n        self.greeting = newGreeting\n    }\n    pub fun getGreeting(): String {\n        return self.greeting\n    }\n} ",
+            'convert this candence code to ABI: pub contract HelloWorld {\n    pub let greeting: String\n\n    init(greet: String) {\n        self.greeting = greet\n    }\n\n    pub fun getGreeting(): String {\n        return self.greeting\n    }\n}',
         },
         {
-          role: "assistant",
-          content: `Sure, here's an ABI for aboce code: [{"name": "init", "inputs": [], "outputs": [], "type": "write"}, {"name": "updateGreeting", "inputs": [{"name": "newGreeting", "type": "String"}], "outputs": [], "type": "write"}, {"name": "getGreeting", "inputs": [], "outputs": [{"name": "returnValue", "type": "String"}], "type": "read"}]`,
+          role: 'assistant',
+          content: `Sure, here's an ABI for aboce code: [{"name": "init", "inputs": [{"name": "greet", "type": "String"}], "outputs": [], "type": "write"}, {"name": "Hello", "inputs": [], "outputs": [{"name": "returnValue", "type": "String"}], "type": "read"}]`,
         },
         {
-          role: "user",
+          role: 'user',
           content:
-            "convert this candence code to ABI: " +
+            'convert this candence code to ABI: ' +
             code +
             "and olny print the output of abi don't add any other texts ",
         },
@@ -45,11 +45,11 @@ export const getReadTransactionScript = async (
   outputs
 ) => {
   if (inputs.length > 0) {
-    const inputString = inputs.map((input) => {
-      return input.name + ": " + input.type;
+    const inputString = inputs.map(input => {
+      return input.name + ': ' + input.type;
     });
-    const inputValue = inputs.map((input) => {
-      return input.name + ": " + input.name;
+    const inputValue = inputs.map(input => {
+      return input.name + ': ' + input.name;
     });
     return `import ${contractName} from ${address}\n\npub fun main(${inputString}):${outputs[0].type} {\n return ${contractName}.${functionName}(
       ${inputValue})\n}`;
@@ -66,32 +66,32 @@ export const getTransactionScript = async (
 ) => {
   try {
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: 'gpt-3.5-turbo',
       messages: [
         {
-          role: "system",
-          content: "You are a helpful cadence transaction script assistant.",
+          role: 'system',
+          content: 'You are a helpful cadence transaction script assistant.',
         },
         {
-          role: "user",
+          role: 'user',
           content:
-            "Write a example script in javascript to interact with contract with args and using Flow JavaScript SDK (@onflow/fcl).",
+            'Write a example script in javascript to interact with contract with args and using Flow JavaScript SDK (@onflow/fcl).',
         },
         {
-          role: "assistant",
+          role: 'assistant',
           content:
             "Sure, here's an example code: await fcl.mutate({cadence: `import HelloWorld from 0xDeployer; transaction(newGreeting: String) { prepare(signer: AuthAccount) { } execute { HelloWorld.changeGreeting(newGreeting: newGreeting) } }`, args: (arg, t) => [arg(newGreeting, t.String)], proposer: fcl.authz, payer: fcl.authz, authorizations: [fcl.authz], limit: 999}); console.log(`Transaction Id:`, transactionId);",
         },
         {
-          role: "user",
+          role: 'user',
           content:
-            "Write a example script in javascript to interact with contract with name  " +
+            'Write a example script in javascript to interact with contract with name  ' +
             contractName +
-            "from address " +
+            'from address ' +
             address +
-            " with function name " +
+            ' with function name ' +
             functionName +
-            " with these arguments and using Flow JavaScript SDK (@onflow/fcl)." +
+            ' with these arguments and using Flow JavaScript SDK (@onflow/fcl).' +
             args,
         },
       ],
@@ -103,13 +103,13 @@ export const getTransactionScript = async (
   }
 };
 
-export const getTransactionScriptForDeployment = async (args) => {
+export const getTransactionScriptForDeployment = async args => {
   if (args.length > 0) {
-    const argString = args.map((arg) => {
-      return arg.name + ": " + arg.type;
+    const argString = args.map(arg => {
+      return arg.name + ': ' + arg.type;
     });
-    const argValue = args.map((arg) => {
-      return arg.name + " ";
+    const argValue = args.map(arg => {
+      return arg.name + ' ';
     });
 
     return `transaction(name: String, code: String, ${argString}) {\n    prepare(signer: AuthAccount) {\n        signer.contracts.add(name: name, code: code.decodeHex(), ${argValue})\n    }\n}`;
@@ -118,33 +118,33 @@ export const getTransactionScriptForDeployment = async (args) => {
   }
 };
 
-export const getTransactionScriptForDEp = async (contractName, code, args) => {
+export const getConstructorARGS = async code => {
   try {
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: 'gpt-3.5-turbo',
       messages: [
         {
-          role: "system",
-          content: "You are a helpful cadence transaction script assistant.",
+          role: 'system',
+          content: 'You are a helpful cadence language assistant.',
         },
         {
-          role: "user",
+          role: 'user',
           content:
-            "Write a example transaction script in Cadence to deploy a contract with single argument.",
+            ' code: pub contract HelloWorld {\n    pub let greeting: String\n\n    init(greet: String) {\n        self.greeting = greet\n    }\n\n    pub fun getGreeting(): String {\n        return self.greeting\n    }\n} ',
         },
         {
-          role: "assistant",
+          role: 'assistant',
           content:
             "Sure, here's an example code: transaction(name: String, code: String) { prepare(signer: AuthAccount) { var arg1 = `test` ; signer.contracts.add(name: name, code: code.decodeHex(), arg1) }}",
         },
         {
-          role: "user",
+          role: 'user',
           content:
-            "Write a transaction script in Cadence for deploying this contract code" +
+            'Write a transaction script in Cadence for deploying this contract code' +
             code +
-            " with name " +
+            ' with name ' +
             contractName +
-            " these arguments of array " +
+            ' these arguments of array ' +
             args,
         },
       ],
@@ -165,7 +165,7 @@ export function cadencePrinter(codeString) {
     matches = str.match(regex2);
   }
   let match = matches[0];
-  match = match.replace("```cadence", "").trim();
-  match = match.replaceAll("```", "").trim();
+  match = match.replace('```cadence', '').trim();
+  match = match.replaceAll('```', '').trim();
   return match;
 }

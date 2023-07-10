@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { Configuration, OpenAIApi } from "openai";
-import { useContext } from "react";
-import { AppContext } from "@/context/StateContext";
+import { useState } from 'react';
+import { Configuration, OpenAIApi } from 'openai';
+import { useContext } from 'react';
+import { AppContext } from '@/context/StateContext';
 import {
   getReadTransactionScript,
   getTransactionScriptForDeployment,
   cadencePrinter,
   getABIFromCode,
-} from "./utils";
+} from '../../utils/OpenAIHelpers';
 
 const Backdrop = ({ onClose }) => {
   return (
@@ -69,7 +69,7 @@ export const Modal = ({ onClose }) => {
     try {
       setStarted(true);
 
-      const args = [{ name: "greet", type: "String" }];
+      const args = [{ name: 'greet', type: 'String' }];
       const response = await getTransactionScriptForDeployment(args);
       //   const code2 = `pub contract CustomGreeting {
 
@@ -96,24 +96,23 @@ export const Modal = ({ onClose }) => {
       console.log(e);
       setStarted(false);
     }
- 
   };
 
   const getTxResponse = async () => {
     try {
       setStarted(true);
-      const contractName = "CustomGreeting";
-      const contractAddress = "0x373e1d329a2b09dd";
+      const contractName = 'CustomGreeting';
+      const contractAddress = '0x373e1d329a2b09dd';
       const inputs = [
-        { name: "msg", type: "String" },
-        { name: "number", type: "int" },
-        { name: "msg", type: "String" },
+        { name: 'msg', type: 'String' },
+        { name: 'number', type: 'int' },
+        { name: 'msg', type: 'String' },
       ];
-      const outputs = [{ name: "msg", type: "String" }];
+      const outputs = [{ name: 'msg', type: 'String' }];
       const response = await getReadTransactionScript(
         contractName,
         contractAddress,
-        "getGreeting",
+        'getGreeting',
         inputs,
         outputs
       );
@@ -143,7 +142,6 @@ export const Modal = ({ onClose }) => {
       setStarted(false);
     }
   };
-
 
   return (
     <div>
@@ -202,7 +200,7 @@ export const Modal = ({ onClose }) => {
                 className="bg-blue-700 p-2 px-5 rounded-md mt-2"
                 onClick={getTxResponse1}
               >
-                {txCode ? "Regenerate tx script" : "Generate tx script"}
+                {txCode ? 'Regenerate tx script' : 'Generate tx script'}
               </button>
             )}
             {code && (

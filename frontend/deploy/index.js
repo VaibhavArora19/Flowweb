@@ -1,30 +1,33 @@
-import * as fcl from "@onflow/fcl";
-import * as t from "@onflow/types";
+import * as fcl from '@onflow/fcl';
+import * as t from '@onflow/types';
+import {
+  getABIFromCode,
+  getTransactionScriptForDeployment,
+} from '@/utils/OpenAIHelpers';
 
-export const deployContract = async (contractName, contractCode) => {
+export const deployContract = async (contractName, contractCode, argValues) => {
+  const txScript = await getTransactionScriptForDeployment(argValues);
+  console.log(txScript);
   const txId = await fcl
     .send([
-      fcl.transaction`
-              transaction(name: String, code: String) {
-                  prepare(acct: AuthAccount) {
-                      acct.contracts.add(name: name, code: code.decodeHex())
-                  }
-              }
-        `,
+      fcl.transaction(txScript),
       fcl.proposer(fcl.currentUser().authorization),
       fcl.payer(fcl.currentUser().authorization), // optional - default is fcl.authz
       fcl.authorizations([fcl.currentUser().authorization]),
       fcl.limit(1000),
       fcl.args([
         fcl.arg(contractName, t.String),
-        fcl.arg(Buffer.from(contractCode, "utf8").toString("hex"), t.String),
+        fcl.arg(Buffer.from(contractCode, 'utf8').toString('hex'), t['String']),
+        ...argValues.map(arg => {
+          return fcl.arg(arg.value, t[arg.type]);
+        }),
       ]),
     ])
     .then(fcl.decode);
 
-  console.log("txId", txId);
+  console.log('txId', txId);
   const txStatus = await fcl.tx(txId).onceSealed();
-  console.log("tx Status ", txStatus);
+  console.log('tx Status ', txStatus);
 };
 
 export const updateContract = async (contractName, contractCode) => {
@@ -47,5 +50,5 @@ export const updateContract = async (contractName, contractCode) => {
     limit: 999,
   });
 
-  console.log("tx id is", transactionId);
+  console.log('tx id is', transactionId);
 };
