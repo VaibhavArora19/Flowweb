@@ -1,7 +1,14 @@
-import { useState } from 'react';
-import { Configuration, OpenAIApi } from 'openai';
-import { useContext } from 'react';
-import { AppContext } from '@/context/StateContext';
+import { useState } from "react";
+import { Configuration, OpenAIApi } from "openai";
+import { useContext } from "react";
+import { AppContext } from "@/context/StateContext";
+import {
+  getReadTransactionScript,
+  getTransactionScriptForDeployment,
+  cadencePrinter,
+  getABIFromCode,
+} from "./utils";
+
 const Backdrop = ({ onClose }) => {
   return (
     <div
@@ -17,6 +24,7 @@ export const Modal = ({ onClose }) => {
   const setCode = ctx.setAiCode;
 
   const [funInfo, setFunInfo] = useState();
+  const [txCode, setTxCode] = useState();
   const [started, setStarted] = useState(false);
   const configuration = new Configuration({
     apiKey: process.env.NEXT_PUBLIC_OPENAI,
@@ -49,27 +57,93 @@ export const Modal = ({ onClose }) => {
         ],
       });
       console.log(response.data.choices[0].message);
-      cadencePrinter(response.data.choices[0].message.content);
+      const code = cadencePrinter(response.data.choices[0].message.content);
+      setCode(code);
       setStarted(false);
     } catch (e) {
       console.log(e);
       setStarted(false);
     }
   };
-  function cadencePrinter(codeString) {
-    let matches;
-    const regex1 = /```cadence([\s\S]*?)```/g;
-    const regex2 = /```([\s\S]*?)```/g;
-    const str = codeString;
-    matches = str.match(regex1);
-    if (!matches) {
-      matches = str.match(regex2);
+  const getTxResponse1 = async () => {
+    try {
+      setStarted(true);
+
+      const args = [{ name: "greet", type: "String" }];
+      const response = await getTransactionScriptForDeployment(args);
+      //   const code2 = `pub contract CustomGreeting {
+
+      //     pub var greeting: String
+
+      //     init() {
+      //         self.greeting = "Hello, World!"
+      //     }
+
+      //     pub fun updateGreeting(newGreeting: String) {
+      //         self.greeting = newGreeting
+      //     }
+
+      //     pub fun getGreeting(msg: String): String {
+      //         return self.greeting.concat(msg)
+      //     }
+      // } `;
+      // const response = await getABIFromCode(code2);
+      console.log(response);
+      // const code = cadencePrinter(response);
+      setTxCode(response);
+      setStarted(false);
+    } catch (e) {
+      console.log(e);
+      setStarted(false);
     }
-    let match = matches[0];
-    match = match.replace('```cadence', '').trim();
-    match = match.replaceAll('```', '').trim();
-    setCode(match);
-  }
+ 
+  };
+
+  const getTxResponse = async () => {
+    try {
+      setStarted(true);
+      const contractName = "CustomGreeting";
+      const contractAddress = "0x373e1d329a2b09dd";
+      const inputs = [
+        { name: "msg", type: "String" },
+        { name: "number", type: "int" },
+        { name: "msg", type: "String" },
+      ];
+      const outputs = [{ name: "msg", type: "String" }];
+      const response = await getReadTransactionScript(
+        contractName,
+        contractAddress,
+        "getGreeting",
+        inputs,
+        outputs
+      );
+      //   const code2 = `pub contract CustomGreeting {
+
+      //     pub var greeting: String
+
+      //     init() {
+      //         self.greeting = "Hello, World!"
+      //     }
+
+      //     pub fun updateGreeting(newGreeting: String) {
+      //         self.greeting = newGreeting
+      //     }
+
+      //     pub fun getGreeting(msg: String): String {
+      //         return self.greeting.concat(msg)
+      //     }
+      // } `;
+      // const response = await getABIFromCode(code2);
+      console.log(response);
+      // const code = cadencePrinter(response);
+      setTxCode(response);
+      setStarted(false);
+    } catch (e) {
+      console.log(e);
+      setStarted(false);
+    }
+  };
+
 
   return (
     <div>
@@ -103,6 +177,32 @@ export const Modal = ({ onClose }) => {
                 disabled={!funInfo}
               >
                 {code ? 'Regenerate' : 'Generate'}
+              </button>
+            )}
+            {code && (
+              // @TODO : clicking on this will add the ai code to the main code in deployment section
+              <button className="bg-green-700 p-2 px-5 rounded-md mt-2">
+                use this code
+              </button>
+            )}
+          </div>
+
+          {txCode && (
+            <div className="bg-[#2D2D2D] py-2 border w-full px-2 border-gray-700 rounded-md placeholder:text-gray-500 text-gray-300 my-1 outline-none ">
+              <pre className="text-gray-300">{txCode}</pre>
+            </div>
+          )}
+          <div className="flex  gap-4">
+            {started ? (
+              <button className="bg-blue-700 p-2 px-5 rounded-md mt-2 w-40 flex items-center justify-center">
+                <img src="/loading.gif" className="h-7 p-1"></img>
+              </button>
+            ) : (
+              <button
+                className="bg-blue-700 p-2 px-5 rounded-md mt-2"
+                onClick={getTxResponse1}
+              >
+                {txCode ? "Regenerate tx script" : "Generate tx script"}
               </button>
             )}
             {code && (
