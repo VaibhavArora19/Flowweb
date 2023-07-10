@@ -13,6 +13,7 @@ const Profile = () => {
     if (user) {
       async function getContractsData() {
         const contracts = await getContracts(user);
+        console.log("contracts", contracts);
 
         const contractArray = [];
 
