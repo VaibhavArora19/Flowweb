@@ -8,6 +8,7 @@ import {
   cadencePrinter,
   getABIFromCode,
 } from "./utils";
+
 const Backdrop = ({ onClose }) => {
   return (
     <div
@@ -34,24 +35,24 @@ export const Modal = ({ onClose }) => {
     try {
       setStarted(true);
       const response = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
+        model: 'gpt-3.5-turbo',
         messages: [
           {
-            role: "system",
-            content: "You are a helpful cadence code assistant.",
+            role: 'system',
+            content: 'You are a helpful cadence code assistant.',
           },
           {
-            role: "user",
-            content: "Write a function in Cadence to increment a number by 1.",
+            role: 'user',
+            content: 'Write a function in Cadence to increment a number by 1.',
           },
           {
-            role: "assistant",
+            role: 'assistant',
             content:
               "Sure, here's an example code: pub fun incrementByOne(num: Int): Int { return num + 1}",
           },
           {
-            role: "user",
-            content: "Write a function in Cadence to " + funInfo,
+            role: 'user',
+            content: 'Write a function in Cadence to ' + funInfo,
           },
         ],
       });
@@ -95,6 +96,7 @@ export const Modal = ({ onClose }) => {
       console.log(e);
       setStarted(false);
     }
+ 
   };
 
   const getTxResponse = async () => {
@@ -142,13 +144,14 @@ export const Modal = ({ onClose }) => {
     }
   };
 
+
   return (
     <div>
       <Backdrop onClose={onClose} />
       <div className="w-[1200px] rounded-2xl absolute top-[10%] left-[20%] shadow-md  rounded-b-2xl  overflow-hidden border border-gray-800">
         <div className="bg-[#232323] pt-6 pb-10 px-4 w-full  rounded-t-2xl">
           <textarea
-            onChange={(event) => {
+            onChange={event => {
               setFunInfo(event.target.value);
             }}
             value={funInfo}
@@ -173,7 +176,7 @@ export const Modal = ({ onClose }) => {
                 onClick={getResponse}
                 disabled={!funInfo}
               >
-                {code ? "Regenerate" : "Generate"}
+                {code ? 'Regenerate' : 'Generate'}
               </button>
             )}
             {code && (

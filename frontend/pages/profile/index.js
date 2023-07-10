@@ -10,7 +10,7 @@ const Profile = () => {
   const user = ctx.user;
 
   useEffect(() => {
-    if (user) {
+    if (user?.addr) {
       async function getContractsData() {
         const contracts = await getContracts(user);
         console.log("contracts", contracts);
@@ -29,7 +29,7 @@ const Profile = () => {
 
       getContractsData();
     }
-  }, [user]);
+  }, [user?.addr]);
 
   return (
     <div>{contracts.length > 0 && <Sidebar contractArray={contracts} />}</div>

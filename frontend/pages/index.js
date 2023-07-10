@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <div>
-      <button onClick={() => setIsOpen(true)}>open</button>
+      {/* <button onClick={() => setIsOpen(true)}>open</button> */}
       {isOpen && <Modal onClose={() => setIsOpen(false)} />}
     </div>
   );
