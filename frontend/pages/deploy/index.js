@@ -1,4 +1,4 @@
-import DeployForm from "@/components/Deploy/DeployForm";
+import DeployForm from '@/components/Deploy/DeployForm';
 
 const Deploy = () => {
   return <DeployForm />;
