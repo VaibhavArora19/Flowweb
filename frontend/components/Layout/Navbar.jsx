@@ -46,9 +46,16 @@ const Navbar = () => {
           create
         </Link>
 
+        <Link
+          href={'/explorer'}
+          className="cursor-pointer text-gray-400 hover:text-white"
+        >
+          explorer
+        </Link>
+
         {ctx.user?.addr && (
           <Link
-            href={'/explorer'}
+            href={'/profile'}
             className="cursor-pointer text-gray-400 hover:text-white"
           >
             profile
