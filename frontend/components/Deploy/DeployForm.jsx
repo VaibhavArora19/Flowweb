@@ -31,6 +31,7 @@ const DeployForm = () => {
   };
 
   const continueDeploy = async () => {
+    console.log("contract is", contract);
     try {
       await deployContract(contractName, contract, argValues);
       setLoading(false);

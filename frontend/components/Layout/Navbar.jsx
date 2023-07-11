@@ -1,19 +1,31 @@
 import * as fcl from '@onflow/fcl';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '@/context/StateContext';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
+import copy from 'copy-to-clipboard';
 
 const Navbar = () => {
   const ctx = useContext(AppContext);
+  const [isCopied, setIsCopied] = useState(false); 
   const router = useRouter();
 
+  useEffect(() => {
+
+    if(isCopied) {
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 800); 
+    }
+
+  }, [isCopied]);
+
   const connectHandler = async () => {
-    if (ctx.user?.addr) {
-      fcl.unauthenticate();
+    if (!ctx.user?.addr) {
+      fcl.authenticate();
     } else {
-      fcl.signUp();
+      copy(ctx.user?.addr);
     }
   };
 
@@ -67,7 +79,7 @@ const Navbar = () => {
           onClick={connectHandler}
         >
           {ctx.user?.addr ? (
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center" onClick={() => {setIsCopied(true)}}>
               <Image
                 src={'/pfp.svg'}
                 height={25}
@@ -76,7 +88,7 @@ const Navbar = () => {
                 alt="profile"
               />
               <p className="font-semibold">
-                {ctx.user?.addr.substring(0, 10)}...
+                {isCopied ? "Copied!" : ctx.user?.addr.substring(0, 10) + "..."}
               </p>
             </div>
           ) : (

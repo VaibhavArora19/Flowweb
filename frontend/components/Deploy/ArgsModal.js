@@ -44,7 +44,7 @@ export const ArgsModal = ({
   return (
     <div>
       <Backdrop onClose={onClose} />
-      <div className="w-[1200px] rounded-2xl absolute top-[10%] left-[20%] shadow-md  rounded-b-2xl  overflow-hidden border border-gray-800">
+      <div className="w-[50%] rounded-2xl absolute top-[30%] left-[25%] shadow-md  rounded-b-2xl  overflow-hidden border border-gray-800">
         <div className="bg-[#232323] pt-6 pb-10 px-4 w-full  rounded-t-2xl">
           {loading ? (
             <Loader inComp={true} />
@@ -53,10 +53,10 @@ export const ArgsModal = ({
               {argValues &&
                 argValues.map(arg => {
                   return (
-                    <div className="flex flex-col">
+                    <div className="flex flex-col mb-2">
                       <label className="text-white text-lg">{arg.name}</label>
                       <input
-                        className="border border-gray-800 rounded-md p-2 text-black"
+                        className="border border-gray-800 rounded-md p-2 bg-[#2D2D2D] text-white"
                         type={arg.type}
                         onChange={e => {
                           setArgValues(

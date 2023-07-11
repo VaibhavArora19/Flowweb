@@ -1,7 +1,6 @@
-import Image from "next/image";
-import { Modal } from "../components/AI/Modal";
-// const inter = Inter({ subsets: ["latin"] });
-import { useState } from "react";
+import Image from 'next/image';
+import { Modal } from '../components/AI/Modal';
+import { useState } from 'react';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
