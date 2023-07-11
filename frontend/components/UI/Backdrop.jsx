@@ -2,7 +2,7 @@ const Backdrop = ({ onClose }) => {
   return (
     <div
       onClick={onClose}
-      className="top-0 left-0 fixed bg-black/20 backdrop-blur-md h-screen w-screen"
+      className="top-0 left-0 fixed bg-black/20 backdrop-blur-md  h-screen w-screen"
     ></div>
   );
 };

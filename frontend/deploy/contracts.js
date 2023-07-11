@@ -1,17 +1,15 @@
-import * as sdk from "@onflow/sdk";
-import * as fcl from "@onflow/fcl";
+import * as sdk from '@onflow/sdk';
+import * as fcl from '@onflow/fcl';
 
-export const getContracts = async (user) => {
+export const getContracts = async user => {
   if (user) {
-    const response = await sdk.send(
-      await sdk.build([sdk.getAccount(user?.addr)])
-    );
+    const response = await sdk.send(await sdk.build([sdk.getAccount(user)]));
 
     return response?.account?.contracts;
   }
 };
 
-export const makeTransaction = async (flowTransaction) => {
+export const makeTransaction = async flowTransaction => {
   try {
     const response = await fcl.send([
       fcl.transaction(flowTransaction),
@@ -21,8 +19,8 @@ export const makeTransaction = async (flowTransaction) => {
       fcl.limit(10000),
     ]);
 
-    console.log("Transaction executed successfully:", response);
+    console.log('Transaction executed successfully:', response);
   } catch (err) {
-    console.error("Some error occured:", err);
+    console.error('Some error occured:', err);
   }
 };
