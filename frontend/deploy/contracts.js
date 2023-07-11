@@ -4,7 +4,7 @@ import * as fcl from "@onflow/fcl";
 export const getContracts = async (user) => {
   if (user) {
     const response = await sdk.send(
-      await sdk.build([sdk.getAccount(user?.addr)])
+      await sdk.build([sdk.getAccount(user)])
     );
 
     return response?.account?.contracts;
