@@ -1,10 +1,12 @@
 import React from 'react';
 import Editor from 'react-simple-code-editor';
+import { useEffect } from 'react';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-dark.min.css'; //Example style, you can use another
-
+import { getAIFunctionCode } from '../../utils/OpenAIHelpers';
+import { deployContract } from '@/deploy';
 const Create = () => {
   const [code, setCode] = React.useState(
     `pub contract Counter {
@@ -20,60 +22,130 @@ const Create = () => {
   }
   `
   );
+  const [funInfo, setFunInfo] = React.useState();
+  const [conArgs, setConArgs] = React.useState([]);
+
+  const contractName = () => {
+    const contractNameRegex = /contract\s+(\w+)\s*\{/;
+    const matches = contractNameRegex.exec(code);
+    const contractName = matches ? matches[1] : '';
+    return contractName;
+  };
+
+  const deploy = async () => {
+    try {
+      const name = contractName();
+      await deployContract(name, code, conArgs);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const addFunction = async () => {
+    try {
+      const response = await getAIFunctionCode(funInfo, code);
+      console.log(response);
+      // const closingBraceIndex = code.lastIndexOf('}');
+      // const updatedCadenceCode =
+      //   code.slice(0, closingBraceIndex) +
+      //   response +
+      //   code.slice(closingBraceIndex);
+      if (response) setCode(response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    if (code) {
+      const initFunctionRegex = /init\s*\(\s*([^)]*)\s*\)\s*{/;
+      const matches = initFunctionRegex.exec(code);
+      const params = matches ? matches[1] : '';
+
+      const paramsArray = params
+        .split(',')
+        .map(param => param.trim())
+        .filter(Boolean)
+        .map(param => {
+          const [name, type] = param.split(':').map(part => part.trim());
+          return { name, type };
+        });
+
+      console.log('Init Function Params:', paramsArray);
+      setConArgs(paramsArray);
+    }
+  }, [code]);
+  console.log(conArgs);
 
   return (
     <div className="flex w-[90%] mx-auto bg-[#121212] min-h-[80vh] mt-10 rounded-lg gap-2 font-Poppins">
       <div className="flex-[0.35] bg-[#1d1d1d] rounded-l-lg px-6 py-7">
         <p className="text-2xl font-semibold">Create & Deploy Contracts</p>
 
-        <div className="flex flex-col mb-1 mt-6">
-          <label className="text-sm text-gray-500 ">Contract Name</label>
-          <input className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md " />
-        </div>
-
         {/* AI */}
         <div className="flex flex-col mb-1 mt-6">
           <label className="text-sm text-gray-500 ">
-            Add function logic (using GPT+4)
+            Add code by entering logic here for a function or init code (using
+            GPT-3)
           </label>
           <textarea
+            onChange={event => {
+              setFunInfo(event.target.value);
+            }}
+            value={funInfo}
             placeholder="Add a small prompt for function logic"
             rows={5}
             className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md placeholder:text-xs placeholder:text-gray-600 "
           />
 
-          <button className="bg-[#212e24] py-2 w-full mt-2 rounded-md text-sm text-green-400">
-            Add to Code
+          <button
+            className="bg-[#212e24] py-2 w-full mt-2 rounded-md text-sm text-green-400"
+            onClick={addFunction}
+          >
+            Generate and Add to Code
           </button>
         </div>
 
         {/* Constructor */}
-        <div className="flex flex-col mb-1 mt-6">
-          <label className="text-sm text-gray-500 ">
-            Constructor arguments (if any)
-          </label>
+        {conArgs.length > 0 && (
+          <div className="flex flex-col mb-1 mt-6">
+            <label className="text-sm text-gray-500 ">
+              Constructor arguments
+            </label>
 
-          <div className="flex gap-10 mt-1 mb-2">
-            <input
-              placeholder="name"
-              className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md placeholder:text-xs placeholder:text-gray-600 "
-            />
-            <input
-              placeholder="type"
-              className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md placeholder:text-xs placeholder:text-gray-600"
-            />
+            <div className="flex gap-10 mt-1 mb-2">
+              {conArgs.map(
+                (arg, index) =>
+                  arg.name &&
+                  arg.type && (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between w-full"
+                    >
+                      <p className="text-xl text-gray-500 ">{arg.name}</p>
+                      <p className="text-xl text-gray-500 ">{arg.type}</p>
+
+                      <input
+                        placeholder="value"
+                        className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md placeholder:text-xs placeholder:text-gray-600 "
+                        onChange={event => {
+                          const updatedArgs = [...conArgs];
+                          updatedArgs[index].value = event.target.value;
+                          setConArgs(updatedArgs);
+                        }}
+                      />
+                    </div>
+                  )
+              )}
+            </div>
           </div>
-
-          <button className="bg-[#212e24] py-2 w-full mt-2 rounded-md text-sm text-green-400">
-            Add to Code
-          </button>
-        </div>
-
+        )}
 
         {/* Deploy Button */}
         <button
           className="py-3 w-full bg-[#7CFEA2] border-green-700 border text-green-800 font-semibold rounded-md  mt-12 hover:bg-[#8af8ab] 
               "
+          onClick={deploy}
         >
           Deploy
         </button>

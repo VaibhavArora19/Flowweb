@@ -103,6 +103,42 @@ export const getTransactionScript = async (
   }
 };
 
+export const getAIFunctionCode = async (funInfo, codeInput) => {
+  try {
+    const response = await openai.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a helpful cadence code assistant.',
+        },
+        {
+          role: 'user',
+          content: 'Write a function in Cadence to increment a number by 1.',
+        },
+        {
+          role: 'assistant',
+          content:
+            "Sure, here's an example code: pub fun incrementByOne(num: Int): Int { return num + 1}",
+        },
+        {
+          role: 'user',
+          content:
+            'Write a function in Cadence to ' +
+            funInfo +
+            'to insert in this cadence contract' +
+            codeInput,
+        },
+      ],
+    });
+    console.log(response.data.choices[0].message);
+    const code = cadencePrinter(response.data.choices[0].message.content);
+    return code;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getTransactionScriptForDeployment = async args => {
   if (args.length > 0) {
     const argString = args.map(arg => {
