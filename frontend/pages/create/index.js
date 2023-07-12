@@ -7,6 +7,8 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-dark.min.css'; //Example style, you can use another
 import { getAIFunctionCode } from '../../utils/OpenAIHelpers';
 import { deployContract } from '@/deploy';
+import SuccessModal from '../../components/Modals/DeployModal';
+
 const Create = () => {
   const [code, setCode] = React.useState(
     `pub contract Counter {
@@ -24,6 +26,7 @@ const Create = () => {
   );
   const [funInfo, setFunInfo] = React.useState();
   const [conArgs, setConArgs] = React.useState([]);
+  const [successModal, setSuccessModal] = React.useState(false);
 
   const contractName = () => {
     const contractNameRegex = /contract\s+(\w+)\s*\{/;
@@ -163,6 +166,7 @@ const Create = () => {
           }}
         />
       </div>
+      {successModal && <SuccessModal onClose={() => setSuccessModal(false)} />}
     </div>
   );
 };
