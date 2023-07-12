@@ -8,17 +8,15 @@ import copy from 'copy-to-clipboard';
 
 const Navbar = () => {
   const ctx = useContext(AppContext);
-  const [isCopied, setIsCopied] = useState(false); 
+  const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-
-    if(isCopied) {
+    if (isCopied) {
       setTimeout(() => {
         setIsCopied(false);
-      }, 800); 
+      }, 800);
     }
-
   }, [isCopied]);
 
   const connectHandler = async () => {
@@ -67,21 +65,17 @@ const Navbar = () => {
           explorer
         </Link>
 
-        {ctx.user?.addr && (
-          <Link
-            href={'/profile'}
-            className="cursor-pointer text-gray-400 hover:text-white"
-          >
-            profile
-          </Link>
-        )}
-
         <button
           className="bg-white py-2 text-lg px-10 text-black rounded-full hover:bg-[#7CFEA2] "
           onClick={connectHandler}
         >
           {ctx.user?.addr ? (
-            <div className="flex gap-2 items-center" onClick={() => {setIsCopied(true)}}>
+            <div
+              className="flex gap-2 items-center"
+              onClick={() => {
+                setIsCopied(true);
+              }}
+            >
               <Image
                 src={'/pfp.svg'}
                 height={25}
@@ -90,7 +84,7 @@ const Navbar = () => {
                 alt="profile"
               />
               <p className="font-semibold">
-                {isCopied ? "Copied!" : ctx.user?.addr.substring(0, 10) + "..."}
+                {isCopied ? 'Copied!' : ctx.user?.addr.substring(0, 10) + '...'}
               </p>
             </div>
           ) : (
