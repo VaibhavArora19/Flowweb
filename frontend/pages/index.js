@@ -1,14 +1,19 @@
 import Image from 'next/image';
 import { Modal } from '../components/AI/Modal';
 import { useState } from 'react';
+import { HiMiniArrowSmallRight } from 'react-icons/hi2';
+import Header from '@/components/Homepage/Header';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div>
+    <section>
       {/* <button onClick={() => setIsOpen(true)}>open</button> */}
-      {isOpen && <Modal onClose={() => setIsOpen(false)} />}
-    </div>
+      {/* {isOpen && <Modal onClose={() => setIsOpen(false)} />}
+       */}
+
+      <Header />
+    </section>
   );
 }
