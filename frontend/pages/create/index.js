@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Editor from 'react-simple-code-editor';
 import { useEffect } from 'react';
 import { highlight, languages } from 'prismjs/components/prism-core';
@@ -8,25 +8,14 @@ import 'prismjs/themes/prism-dark.min.css'; //Example style, you can use another
 import { getAIFunctionCode } from '../../utils/OpenAIHelpers';
 import { deployContract } from '@/deploy';
 import SuccessModal from '../../components/Modals/DeployModal';
+import Loader from '@/components/UI/Loader';
 
 const Create = () => {
-  const [code, setCode] = React.useState(
-    `pub contract Counter {
-      pub var counter: Int
-  
-      init() {
-          self.counter = 0
-      }
-  
-      pub fun incrementCounter(amount: Int) {
-          self.counter = self.counter + amount
-      }
-  }
-  `
-  );
+  const [code, setCode] = React.useState('');
   const [funInfo, setFunInfo] = React.useState();
   const [conArgs, setConArgs] = React.useState([]);
   const [successModal, setSuccessModal] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
   const contractName = () => {
     const contractNameRegex = /contract\s+(\w+)\s*\{/;
@@ -46,6 +35,7 @@ const Create = () => {
 
   const addFunction = async () => {
     try {
+      setLoading(true);
       const response = await getAIFunctionCode(funInfo, code);
       console.log(response);
       // const closingBraceIndex = code.lastIndexOf('}');
@@ -54,8 +44,10 @@ const Create = () => {
       //   response +
       //   code.slice(closingBraceIndex);
       if (response) setCode(response);
+      setLoading(false);
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
   };
 
@@ -81,8 +73,8 @@ const Create = () => {
   console.log(conArgs);
 
   return (
-    <div className="flex w-[90%] mx-auto bg-[#121212] min-h-[80vh] mt-10 rounded-lg gap-2 font-Poppins">
-      <div className="flex-[0.35] bg-[#1d1d1d] rounded-l-lg px-6 py-7">
+    <div className="flex w-[90%] mx-auto bg-[#121212] h-[80vh] mt-10 rounded-lg gap-2 font-Poppins">
+      <div className="flex-[0.35] max-w-[600px] bg-[#1d1d1d] rounded-l-lg px-6 py-7">
         <p className="text-2xl font-semibold">Create & Deploy Contracts</p>
 
         {/* AI */}
@@ -105,7 +97,7 @@ const Create = () => {
             className="bg-[#212e24] py-2 w-full mt-2 rounded-md text-sm text-green-400"
             onClick={addFunction}
           >
-            Generate and Add to Code
+            {loading ? <Loader inComp={true} /> : 'Generate and Add to Code'}
           </button>
         </div>
 
@@ -116,17 +108,21 @@ const Create = () => {
               Constructor arguments
             </label>
 
-            <div className="flex gap-10 mt-1 mb-2">
+            <div className="flex gap-2  mt-1 mb-2">
               {conArgs.map(
                 (arg, index) =>
                   arg.name &&
                   arg.type && (
                     <div
                       key={index}
-                      className="flex items-center justify-between w-full"
+                      className="flex-col items-center justify-between w-full"
                     >
-                      <p className="text-xl text-gray-500 ">{arg.name}</p>
-                      <p className="text-xl text-gray-500 ">{arg.type}</p>
+                      <p className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md border border-gray-800">
+                        {arg.name}
+                      </p>
+                      <p className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md border border-gray-800">
+                        {arg.type}
+                      </p>
 
                       <input
                         placeholder="value"
@@ -153,7 +149,7 @@ const Create = () => {
           Deploy
         </button>
       </div>
-      <div className="flex-[0.65]">
+      <div className="flex-[0.65] overflow-y-scroll">
         <Editor
           value={code}
           onValueChange={code => setCode(code)}
