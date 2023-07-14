@@ -12,7 +12,7 @@ const DeployForm = () => {
 
   const contractName = () => {
     const contractNameRegex = /contract\s+(\w+)\s*\{/;
-    const matches = contractNameRegex.exec(code);
+    const matches = contractNameRegex.exec(contract);
     const contractName = matches ? matches[1] : '';
     return contractName;
   };

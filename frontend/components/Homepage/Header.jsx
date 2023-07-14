@@ -4,7 +4,7 @@ import { HiMiniArrowSmallRight } from 'react-icons/hi2';
 const Header = () => {
   return (
     <div className="flex h-[93vh] flex-col items-center pt-40">
-      <p className="text-gray-500 font-Poppins text-xl font-semibold uppercase">
+      <p className="text-gray-400 font-Poppins text-xl font-light uppercase">
         Welcome to Flowweb
       </p>
       <p className="text-center text-[100px] font-bold font-Poppins leading-[110px]">
