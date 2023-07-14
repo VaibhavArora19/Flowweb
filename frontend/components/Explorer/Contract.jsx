@@ -5,18 +5,7 @@ import styles from '../../node_modules/highlight.js/styles/railscasts.css';
 import Backdrop from '../UI/Backdrop';
 import { updateContract } from '@/deploy';
 import Loader from '../UI/Loader';
-
-// const Code = ({code}) => {
-//   return (
-//     <div className='mt-5 rounded-md overflow-hidden' >
-//     <Highlight className={`${styles}`} innerHTML={false} >
-//      {code}
-//     </Highlight>
-//   </div>
-//   )
-// }
-
-// export default Code
+import QueryModal from './QueryModal';
 
 const Contract = ({ contract }) => {
   const [showModal, setShowModal] = useState(false);
@@ -26,17 +15,15 @@ const Contract = ({ contract }) => {
   const [editedContract, setEditedContract] = useState(contract.contract);
   const [isLoading, setIsLoading] = useState(false);
 
-
   const updateContractHandler = async () => {
     try {
       setIsLoading(true);
-      await updateContract(contract?.name, editedContract)
+      await updateContract(contract?.name, editedContract);
       setIsLoading(false);
-    } catch(err) {
+    } catch (err) {
       setIsLoading(false);
     }
-  }
-
+  };
 
   return (
     <div className="bg-[#151717] relative p-6 rounded-xl w-[350px] hover:bg-[#1c1e1e] cursor-pointer  ">
@@ -79,7 +66,14 @@ const Contract = ({ contract }) => {
           >
             Edit{' '}
           </p>
-          <p>Query </p>
+          <p
+            onClick={() => {
+              setShowQueryModal(true);
+              setShowModal(false);
+            }}
+          >
+            Query{' '}
+          </p>
         </div>
       )}
 
@@ -90,7 +84,7 @@ const Contract = ({ contract }) => {
               setShowContractModal(false);
             }}
           />
-          <div className="w-[550px] min-h-[300px] font-Poppins text-[#EDEDEF] font-semibold text-sm bg-[black] p-4 rounded-2xl fixed top-[50%] left-[50%] shadow-2xl -translate-x-[50%] -translate-y-[50%] z-10 rounded-b-2xl  overflow-hidden border border-gray-900">
+          <div className="w-[550px] min-h-[300px] font-Poppins text-[#EDEDEF] font-semibold text-sm bg-[black] p-4 rounded-xl fixed top-[50%] left-[50%] shadow-2xl -translate-x-[50%] -translate-y-[50%] z-10   overflow-hidden border border-green-300">
             <Highlight className={`${styles}`} innerHTML={false}>
               {contract?.contract}
             </Highlight>
@@ -105,7 +99,7 @@ const Contract = ({ contract }) => {
               setShowEditModal(false);
             }}
           />
-          <div className="w-fit min-h-[300px] flex flex-col font-Poppins text-[#EDEDEF] font-semibold text-sm bg-[black] p-4 rounded-2xl fixed top-[50%] left-[50%] shadow-2xl -translate-x-[50%] -translate-y-[50%] z-10 rounded-b-2xl  overflow-hidden border border-gray-900">
+          <div className="w-fit min-h-[300px] flex flex-col font-Poppins text-[#EDEDEF] font-semibold text-sm bg-[black] p-4 fixed top-[50%] left-[50%] shadow-2xl -translate-x-[50%] -translate-y-[50%] z-10 rounded-xl  overflow-hidden border border-green-300">
             <textarea
               onChange={e => {
                 setEditedContract(e.target.value);
@@ -119,9 +113,20 @@ const Contract = ({ contract }) => {
               onClick={updateContractHandler}
               className="py-3 w-full mt-5 rounded-md bg-[#7CFEA2] text-black"
             >
-              {isLoading ? <Loader inComp={true}/> : "Redeploy"}
+              {isLoading ? <Loader inComp={true} /> : 'Redeploy'}
             </button>
           </div>
+        </>
+      ) : null}
+
+      {showQueryModal ? (
+        <>
+          <Backdrop
+            onClose={() => {
+              setShowQueryModal(false);
+            }}
+          />
+          <QueryModal />
         </>
       ) : null}
     </div>

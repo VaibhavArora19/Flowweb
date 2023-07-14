@@ -54,9 +54,14 @@ export const ArgsModal = ({
                 argValues.map(arg => {
                   return (
                     <div className="flex flex-col mb-2">
-                      <label className="text-white text-lg">{arg.name}</label>
+                      <p className="text-sm text-gray-400 mb-4 font-semibold">
+                        Add arguments here
+                      </p>
+                      <label className="text-white text-lg font-Poppins">
+                        {arg.name}
+                      </label>
                       <input
-                        className="border border-gray-800 rounded-md p-2 bg-[#2D2D2D] text-white"
+                        className="border border-gray-800 rounded-md p-2 bg-[#2D2D2D] text-white outline-none"
                         type={arg.type}
                         onChange={e => {
                           setArgValues(
@@ -80,7 +85,7 @@ export const ArgsModal = ({
                   setLoading(true);
                   continueDeploy();
                 }}
-                className="bg-[#00ff00] text-black rounded-md p-2 text-lg"
+                className="bg-[#7CFEA2] text-black rounded-md p-2 font-Poppins mt-2 text-lg"
               >
                 {loading ? <Loader inComp={true} /> : 'Continue'}
               </button>

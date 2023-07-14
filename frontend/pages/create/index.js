@@ -121,16 +121,16 @@ const Create = () => {
                       key={index}
                       className="flex-col items-center justify-between w-full"
                     >
-                      <p className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md border border-gray-800">
+                      <p className="bg-[#121212] py-2 outline-none  px-2 mt-1 w-[200px] rounded-md border border-gray-800">
                         {arg.name}
                       </p>
-                      <p className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md border border-gray-800">
+                      <p className="bg-[#121212] py-2 outline-none  px-2 mt-1 w-[200px] rounded-md border border-gray-800">
                         {arg.type}
                       </p>
 
                       <input
                         placeholder="value"
-                        className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md placeholder:text-xs placeholder:text-gray-600 "
+                        className="bg-[#121212] w-[200px] py-2 outline-none  px-2 mt-1 rounded-md placeholder:text-xs placeholder:text-gray-600 "
                         onChange={event => {
                           const updatedArgs = [...conArgs];
                           updatedArgs[index].value = event.target.value;

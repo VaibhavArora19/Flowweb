@@ -30,7 +30,7 @@ const Navbar = () => {
   console.log(ctx.user);
 
   return (
-    <div className="flex items-center justify-between py-4 mx-20">
+    <div className="flex items-center justify-between py-4 w-[90%] mx-auto">
       <Image
         src={'/logo.svg'}
         alt="Logo"
