@@ -161,6 +161,7 @@ const Create = () => {
         <Editor
           value={code}
           onValueChange={code => setCode(code)}
+          placeholder="Your generated code will appear here !!"
           highlight={code => highlight(code, languages.js)}
           padding={10}
           className="text-lg "
