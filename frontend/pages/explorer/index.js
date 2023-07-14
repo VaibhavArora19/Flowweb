@@ -20,7 +20,7 @@ const Explorer = () => {
   };
 
   return (
-    <div className="bg-[black]  flex items-center justify-start px-40 h-screen">
+    <div className="bg-[black]  flex  justify-start px-20 pt-[15%] h-screen">
       {/* <div className="flex gap-3 items-center">
         <input
           onChange={addressChangeHandler}

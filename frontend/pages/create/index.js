@@ -16,6 +16,7 @@ const Create = () => {
   const [conArgs, setConArgs] = React.useState([]);
   const [successModal, setSuccessModal] = React.useState(false);
   const [loading, setLoading] = useState(false);
+  const [deploying, setDeploying] = useState(false);
 
   const contractName = () => {
     const contractNameRegex = /contract\s+(\w+)\s*\{/;
@@ -26,10 +27,13 @@ const Create = () => {
 
   const deploy = async () => {
     try {
+      setDeploying(true);
       const name = contractName();
       await deployContract(name, code, conArgs);
+      setDeploying(false);
     } catch (e) {
       console.log(e);
+      setDeploying(false);
     }
   };
 
@@ -90,11 +94,11 @@ const Create = () => {
             value={funInfo}
             placeholder="Add a small prompt for function logic"
             rows={5}
-            className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md placeholder:text-xs placeholder:text-gray-600 "
+            className="bg-[#121212] py-2 outline-none  px-2 mt-1 rounded-md placeholder:text-xs placeholder:text-gray-600 min-h-[100px] max-h-[300px] "
           />
 
           <button
-            className="bg-[#212e24] py-2 w-full mt-2 rounded-md text-sm text-green-400"
+            className="bg-[#212e24] py-3 w-full mt-4 rounded-md text-sm text-green-400 "
             onClick={addFunction}
           >
             {loading ? <Loader inComp={true} /> : 'Generate and Add to Code'}
@@ -142,11 +146,12 @@ const Create = () => {
 
         {/* Deploy Button */}
         <button
+          disabled={!code.length ? true : false}
           className="py-3 w-full bg-[#7CFEA2] border-green-700 border text-green-800 font-semibold rounded-md  mt-12 hover:bg-[#8af8ab] 
               "
           onClick={deploy}
         >
-          Deploy
+          {deploying ? <Loader inComp={true} /> : 'Deploy'}
         </button>
       </div>
       <div className="flex-[0.65] overflow-y-scroll">

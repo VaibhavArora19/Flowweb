@@ -30,7 +30,7 @@ const Navbar = () => {
   console.log(ctx.user);
 
   return (
-    <div className="flex items-center justify-between py-3 mx-20">
+    <div className="flex items-center justify-between py-4 mx-20">
       <Image
         src={'/logo.svg'}
         alt="Logo"
@@ -38,7 +38,7 @@ const Navbar = () => {
         width={40}
         className="cursor-pointer hover:scale-105 hover:rotate-90 ease-in-out transition-all "
       />
-      <div className="flex items-center gap-20 text-lg xl:ml-36">
+      <div className="flex items-center gap-20 text-lg xl:ml-40">
         <Link
           href={'/'}
           className="cursor-pointer text-gray-400 hover:text-white hover:scale-105 capitalize"
