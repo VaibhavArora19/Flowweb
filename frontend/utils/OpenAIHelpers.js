@@ -19,7 +19,7 @@ export const getABIFromCode = async code => {
         },
         {
           role: 'assistant',
-          content: `Sure, here's an ABI for aboce code: [{"name": "init", "inputs": [{"name": "greet", "type": "String"}], "outputs": [], "type": "write"}, {"name": "Hello", "inputs": [], "outputs": [{"name": "returnValue", "type": "String"}], "type": "read"}]`,
+          content: `Sure, here's an ABI for aboce code: [{"name": "greeting", "inputs": [], "outputs": [{"name": "", "type": "String"}], "method": "query", type:"variable"}, {"name": "getGreeting", "inputs": [], "outputs": [{"name": "", "type": "String"}], "method": "mutate",type:"function"}]`,
         },
         {
           role: 'user',
@@ -42,7 +42,8 @@ export const getReadTransactionScript = async (
   address,
   functionName,
   inputs,
-  outputs
+  outputs,
+  isFunction
 ) => {
   if (inputs.length > 0) {
     const inputString = inputs.map(input => {
@@ -54,7 +55,9 @@ export const getReadTransactionScript = async (
     return `import ${contractName} from ${address}\n\npub fun main(${inputString}):${outputs[0].type} {\n return ${contractName}.${functionName}(
       ${inputValue})\n}`;
   } else {
-    return `import ${contractName} from ${address}\n\npub fun main():${outputs[0].type} {\n return ${contractName}.${functionName}()\n}`;
+    return `import ${contractName} from ${address}\n\npub fun main():${
+      outputs[0].type
+    } {\n return ${contractName}.${functionName}${isFunction ? '()' : ''}\n}`;
   }
 };
 

@@ -1,9 +1,10 @@
 import * as fcl from '@onflow/fcl';
+import * as t from '@onflow/types';
 
 export const Query = async (transactionScript, args) => {
   try {
     const txArgs = args.map(arg => {
-      return arg(arg.value, arg.type);
+      return fcl.arg(arg.value, t[arg.type]);
     });
 
     const txId = await fcl.query({
@@ -11,7 +12,7 @@ export const Query = async (transactionScript, args) => {
       args: (arg, t) => txArgs,
     });
 
-    console.log('Transaction id is', txId);
+    return txId;
   } catch (err) {
     console.log(err);
   }
@@ -20,7 +21,7 @@ export const Query = async (transactionScript, args) => {
 export const Mutate = async (transactionScript, args) => {
   try {
     const txArgs = args.map(arg => {
-      return arg(arg.value, arg.type);
+      return arg(arg.value, t[arg.type]);
     });
 
     const txId = await fcl.mutate({

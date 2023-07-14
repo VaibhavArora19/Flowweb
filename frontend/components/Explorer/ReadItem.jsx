@@ -1,31 +1,64 @@
 import React, { useState } from 'react';
 import ReadInput from './ReadInput';
 import { useRouter } from 'next/router';
-
-const ReadItem = ({ i, value, datatype, functionName, inputs, abi }) => {
+import { getReadTransactionScript } from '@/utils/OpenAIHelpers';
+import { Query } from '@/query';
+const ReadItem = ({
+  i,
+  value,
+  datatype,
+  functionName,
+  inputs,
+  isFunction,
+  contractName,
+  outputs,
+}) => {
   const [showReadData, setShowReadData] = useState(false);
-  const [enteredInput, setEnteredInput] = useState([]);
+  const [enteredInput, setEnteredInput] = useState(inputs);
   const [result, setResult] = useState(null);
   const router = useRouter();
+  const address = router.query.address;
+  console.log(enteredInput);
 
-  const queryHandler = event => {
+  const queryHandler = async event => {
     event.preventDefault();
 
-    if (!enteredInput.trim().length) {
-      // toast error
-      alert('Please enter input field');
-    } else {
-      console.log('Query data');
+    try {
+      const script = await getReadTransactionScript(
+        contractName,
+        address,
+        functionName,
+        inputs,
+        outputs,
+        isFunction
+      );
+      const result = await Query(script, enteredInput);
+      console.log(result);
+      setResult(result);
+    } catch (err) {
+      console.log(err);
     }
   };
 
   const readDataHandler = async () => {
-    // await ethereum.request({ method: 'eth_requestAccounts' });
-    // if (datatype.includes('int')) {
-    //   setResult(contractRead?.data?.toString());
-    // } else {
-    //   setResult(contractRead.data);
-    // }
+    try {
+      const script = await getReadTransactionScript(
+        contractName,
+        address,
+        functionName,
+        inputs,
+        outputs,
+        isFunction
+      );
+      const result = await Query(script, []);
+      console.log(result);
+      setResult(result);
+
+      // const result = await executeScript(script);
+      // setResult(result);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -67,13 +100,18 @@ const ReadItem = ({ i, value, datatype, functionName, inputs, abi }) => {
                   name={input.name}
                   type={input.type}
                   key={i}
+                  i={i}
+                  enteredInput={enteredInput}
                   setEnteredInput={setEnteredInput}
                 />
               ))}
-
+              <p className="text-white mt-1 ml-1">
+                {result !== null && result}
+              </p>
               <button
                 type="submit"
                 className="w-[100px] bg-[#111111] hover:bg-black py-2 mt-4 rounded-md text-gray-400"
+                onClick={queryHandler}
               >
                 Query
               </button>

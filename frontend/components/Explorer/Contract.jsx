@@ -126,7 +126,7 @@ const Contract = ({ contract }) => {
               setShowQueryModal(false);
             }}
           />
-          <QueryModal />
+          <QueryModal code={contract.contract} contractName={contract?.name} />
         </>
       ) : null}
     </div>

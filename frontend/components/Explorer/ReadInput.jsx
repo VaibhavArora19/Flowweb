@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 
-const ReadInput = ({ name, type, setEnteredInput }) => {
+const ReadInput = ({ name, type, setEnteredInput, i, enteredInput }) => {
   const inputChangeHandler = event => {
-    setEnteredInput(event.target.value);
+    console.log(i);
+    // update the index i of enteredInput array with the new value
+    setEnteredInput(prevState => {
+      const newState = [...prevState];
+      newState[i].value = event.target.value;
+      return newState;
+    });
   };
 
   return (
