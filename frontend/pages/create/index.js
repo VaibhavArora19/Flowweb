@@ -17,6 +17,8 @@ const Create = () => {
   const [successModal, setSuccessModal] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const [deploying, setDeploying] = useState(false);
+  const [showDeploySuccessFullModal, setShowDeploySuccessFullModal] =
+    useState(false);
 
   const contractName = () => {
     const contractNameRegex = /contract\s+(\w+)\s*\{/;
@@ -31,6 +33,7 @@ const Create = () => {
       const name = contractName();
       await deployContract(name, code, conArgs);
       setDeploying(false);
+      setSuccessModal(true);
     } catch (e) {
       console.log(e);
       setDeploying(false);

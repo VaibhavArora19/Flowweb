@@ -62,7 +62,7 @@ const AllContracts = () => {
       <p className="bg-[#0f0f0f] w-fit py-3 px-10 rounded-md mb-4">
         All contracts
       </p>
-      <div className=" flex gap-12">
+      <div className=" flex gap-12 flex-wrap">
         {contracts?.length &&
           contracts.map(contract => <Contract contract={contract} />)}
       </div>
