@@ -14,6 +14,10 @@ module.exports = {
         Poppins: ['Poppins', 'sans-serif'],
         Roboto: ['Roboto', 'sans-serif'],
       },
+      animation: {
+        
+        'spin-extraSlow': 'spin 15s linear infinite',
+      },
     },
   },
   plugins: [],
