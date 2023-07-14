@@ -15,7 +15,6 @@ module.exports = {
         Roboto: ['Roboto', 'sans-serif'],
       },
       animation: {
-        
         'spin-extraSlow': 'spin 15s linear infinite',
       },
     },

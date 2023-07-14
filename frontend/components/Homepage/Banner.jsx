@@ -24,7 +24,7 @@ const Banner = () => {
           height={800}
           width={800}
           alt="circle"
-          className="absolute -top-28 -right-20 animate-spin-slow animate-spin-extraSlow hover:animate-none"
+          className="absolute -top-28 -right-20 animate-spin-slow animate-spin-extraSlow "
         />
 
         <Image
