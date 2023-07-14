@@ -81,7 +81,7 @@ const Create = () => {
 
   return (
     <div className="flex w-[90%] mx-auto bg-[#121212] h-[80vh] mt-10 rounded-lg gap-2 font-Poppins">
-      <div className="flex-[0.35] max-w-[600px] bg-[#1d1d1d] rounded-l-lg px-6 py-7">
+      <div className="flex-[0.35] max-w-[600px] bg-[#1d1d1d] rounded-l-lg px-6 py-7 overflow-y-scroll">
         <p className="text-2xl font-semibold">Create & Deploy Contracts</p>
 
         {/* AI */}
@@ -110,30 +110,30 @@ const Create = () => {
 
         {/* Constructor */}
         {conArgs.length > 0 && (
-          <div className="flex flex-col mb-1 mt-6">
+          <div className="flex flex-col mb-1 mt-6 ">
             <label className="text-sm text-gray-500 ">
               Constructor arguments
             </label>
 
-            <div className="flex gap-2  mt-1 mb-2">
+            <div className="flex gap-2  mt-1 mb-2 flex-wrap ">
               {conArgs.map(
                 (arg, index) =>
                   arg.name &&
                   arg.type && (
                     <div
                       key={index}
-                      className="flex-col items-center justify-between w-full"
+                      className="flex-col items-center justify-between w-full "
                     >
-                      <p className="bg-[#121212] py-2 outline-none  px-2 mt-1 w-[200px] rounded-md border border-gray-800">
+                      <p className="bg-[#121212] py-2 outline-none  px-2 mt-1 w-[300px] rounded-md border border-gray-800">
                         {arg.name}
                       </p>
-                      <p className="bg-[#121212] py-2 outline-none  px-2 mt-1 w-[200px] rounded-md border border-gray-800">
+                      <p className="bg-[#121212] py-2 outline-none  px-2 mt-1 w-[300px] rounded-md border border-gray-800">
                         {arg.type}
                       </p>
 
                       <input
                         placeholder="value"
-                        className="bg-[#121212] w-[200px] py-2 outline-none  px-2 mt-1 rounded-md placeholder:text-xs placeholder:text-gray-600 "
+                        className="bg-[#121212] w-[300px] py-2 outline-none  px-2 mt-1 rounded-md placeholder:text-xs placeholder:text-gray-600 "
                         onChange={event => {
                           const updatedArgs = [...conArgs];
                           updatedArgs[index].value = event.target.value;
