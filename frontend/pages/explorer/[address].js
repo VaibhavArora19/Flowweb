@@ -53,9 +53,9 @@ const AllContracts = () => {
           className="rounded-xl"
           alt="profile"
         />
-        <div>
-          <p className="text-xl font-semibold mb-2">@testuser</p>
-          <p className="text-gray-400">{user?.addr?.slice(0, 12)}...</p>
+        <div className="text-lg">
+          <p className="text-xl font-semibold mb-2">Account</p>
+          <p className="text-gray-400">{address}</p>
         </div>
       </div>
 
