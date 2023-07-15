@@ -37,6 +37,28 @@ export const getABIFromCode = async code => {
   }
 };
 
+export const getWriteTransactionScript = async (
+  contractName,
+  address,
+  functionName,
+  inputs
+) => {
+  if (inputs.length > 0) {
+    const inputString = inputs.map(input => {
+      return input.name + ': ' + input.type;
+    });
+    const inputValue = inputs.map(input => {
+      return input.name + ': ' + input.name;
+    });
+    return `import ${contractName} from ${address}\n\ntransaction(${inputString}) {\n prepare(acct: AuthAccount) {\n    ${contractName}.${functionName}(
+      ${inputValue})\n}}`;
+  } else {
+    return `import ${contractName} from ${address}\n\ntransaction(){\n    prepare(acct: AuthAccount) {\n   
+          ${contractName}.${functionName}();
+      }}`;
+  }
+};
+
 export const getReadTransactionScript = async (
   contractName,
   address,

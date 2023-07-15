@@ -133,6 +133,7 @@ const QueryModal = ({ code, contractName }) => {
               i={i}
               inputs={method.inputs}
               abi={writeMethods}
+              contractName={contractName}
             />
           ))}
         </div>

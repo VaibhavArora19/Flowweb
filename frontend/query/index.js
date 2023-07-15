@@ -21,7 +21,7 @@ export const Query = async (transactionScript, args) => {
 export const Mutate = async (transactionScript, args) => {
   try {
     const txArgs = args.map(arg => {
-      return arg(arg.value, t[arg.type]);
+      return fcl.arg(arg.value, t[arg.type]);
     });
 
     const txId = await fcl.mutate({
