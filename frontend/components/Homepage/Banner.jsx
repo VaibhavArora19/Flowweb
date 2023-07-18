@@ -27,12 +27,16 @@ const Banner = () => {
           className="absolute -top-28 -right-20 animate-spin-slow animate-spin-extraSlow "
         />
 
-        <Image
+        {/* <Image
           src="/logo.svg"
           height={250}
           width={250}
           className="absolute z-10 left-[45%] top-32"
-        />
+        /> */}
+
+        <p className="absolute z-10 left-[45%] top-48 text-[120px] text-[#7CFEA2] font-Poppins">
+          FW.
+        </p>
       </div>
     </section>
   );

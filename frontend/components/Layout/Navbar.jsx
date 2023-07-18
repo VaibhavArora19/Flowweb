@@ -31,13 +31,12 @@ const Navbar = () => {
 
   return (
     <div className="flex items-center justify-between py-4 w-[90%] mx-auto font-Poppins">
-      <Image
-        src={'/logo.svg'}
-        alt="Logo"
-        height={40}
-        width={40}
-        className="cursor-pointer hover:scale-105 hover:rotate-90 ease-in-out transition-all "
-      />
+      <p
+        className="text-5xl font-semibold font-Poppins
+      "
+      >
+        FW.
+      </p>
       <div className="flex items-center gap-20 text-lg xl:ml-40">
         <Link
           href={'/'}

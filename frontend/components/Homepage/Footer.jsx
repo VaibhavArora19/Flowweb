@@ -7,14 +7,18 @@ const Footer = () => {
   return (
     <div className="w-full text-white px-20 mt-[150px]">
       <h2 className="text-3xl font-semibold mb-10">Flowweb.</h2>
-      <p className="text-gray-400 mb-12">
+      <p className="text-gray-400 mb-4">
         Flowweb is currrently built for Flow Hackathon S2 and should be used at
         your own risk. We take security seriously and our contracts have been
         thoroughly tested and formally verified but bugs may still exist.
       </p>
 
+      <p className=" text-gray-400 mb-12 font-Poppins">
+        Design is inspired by Synap!
+      </p>
+
       <div className="flex justify-between font-light text-white items-center">
-        <p className="text-sm">&#169; 2023 Flowweb Inc.</p>
+        <p className="text-sm">&#169; 2023 Flowweb.</p>
         <ul className="flex gap-8 items-center text-white">
           <li
             onClick={() => {
