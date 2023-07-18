@@ -1,38 +1,11 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Flowweb
 
-## Getting Started
+Flowweb offers a streamlined solution by leveraging the power of AI and providing a user-friendly interface. The traditional method of manually coding contracts is replaced by an AI-assisted approach. With Flowweb, developers can create contracts effortlessly by providing a simple prompt. The advanced GPT-3.0 technology then generates complete contract code, saving developers significant time and effort. This AI-powered contract creation feature allows developers, regardless of their coding expertise, to create robust and customized contracts with ease.
 
-First, run the development server:
+Once contracts are created, Flowweb simplifies the deployment process onto the Flow Blockchain. Developers can easily paste their Cadence contract code into the dapp and initiate the deployment process. This eliminates the need for complex manual configurations such as using CLI or different JS libraries and ensures a quick and efficient deployment experience. Flowweb streamlines the deployment process, making it accessible and user-friendly for developers of all levels of expertise.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+[demo video](https://youtu.be/U4q-MARDWrw)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[live link](https://floww-web.vercel.app/)
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[Presentation Deck](https://docs.google.com/presentation/d/1tfaHjxr-mbYQdqEEiIA6--zbBJUL3NCdiRaR8Ev9aJI/edit#slide=id.SLIDES_API1160355625_12)
